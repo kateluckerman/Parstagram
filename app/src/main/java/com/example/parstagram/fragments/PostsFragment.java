@@ -88,6 +88,7 @@ public class PostsFragment extends Fragment {
                 allPosts.clear();
                 allPosts.addAll(posts);
                 adapter.notifyDataSetChanged();
+                swipeContainer.setRefreshing(false);
             }
         });
     }
