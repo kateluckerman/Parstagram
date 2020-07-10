@@ -52,6 +52,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private TextView tvDescription;
         private TextView tvUserBelow;
         private TextView tvTime;
+        private ImageView ivProfilePic;
+
+        public final String KEY_PROFILE_IMAGE = "profileImage";
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -60,6 +63,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvUserBelow = itemView.findViewById(R.id.tvUserBelow);
             tvTime = itemView.findViewById(R.id.tvTime);
+            ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
         }
 
         public void bind(Post post) {
@@ -71,7 +75,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             if (image != null) {
                 Glide.with(context).load(image.getUrl()).into(ivImage);
             }
-
+            ParseFile profileImage = post.getUser().getParseFile(KEY_PROFILE_IMAGE);
+            if (profileImage != null) {
+                Glide.with(context).load(profileImage.getUrl()).into(ivProfilePic);
+            }
         }
     }
 

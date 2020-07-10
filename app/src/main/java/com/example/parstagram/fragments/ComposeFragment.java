@@ -98,7 +98,7 @@ public class ComposeFragment extends Fragment {
 
     }
 
-    private void launchCamera() {
+    public void launchCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         photoFile = getPhotoFileUri(photoFileName);
 
