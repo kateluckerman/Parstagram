@@ -98,7 +98,6 @@ public class ProfileFragment extends Fragment {
         ivProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Change profile image onClick
                 launchCamera();
                 if (photoFile != null) {
                     ParseFile profileImage = new ParseFile(photoFile);

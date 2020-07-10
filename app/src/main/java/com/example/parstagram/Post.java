@@ -7,13 +7,19 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import org.parceler.Parcel;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+@Parcel(analyze={Post.class})
 @ParseClassName("Post")
 public class Post extends ParseObject {
+
+    // empty constructor for parceler use
+    public Post() {}
 
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_IMAGE = "image";

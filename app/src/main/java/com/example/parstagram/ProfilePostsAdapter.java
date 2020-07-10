@@ -1,6 +1,8 @@
 package com.example.parstagram;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,12 +44,13 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
         return posts.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView ivImage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ivImage = itemView.findViewById(R.id.ivImage);
+            itemView.setOnClickListener(this);
         }
 
         public void bind(Post post) {
@@ -56,6 +59,15 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
                 Glide.with(context).load(image.getUrl()).into(ivImage);
             }
 
+        }
+
+        @Override
+        public void onClick(View view) {
+            Log.i("ProfilePostsAdapter", "onClick of post in profile");
+            // Launch a new post activity and pass it the clicked on post
+            Intent intent = new Intent(context, PostActivity.class);
+            intent.putExtra(Post.class.getSimpleName(), posts.get(getAdapterPosition()));
+            context.startActivity(intent);
         }
     }
 
