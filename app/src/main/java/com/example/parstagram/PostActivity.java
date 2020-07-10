@@ -1,7 +1,10 @@
 package com.example.parstagram;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,6 +30,12 @@ public class PostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.item_post);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        actionBar.setIcon(R.drawable.nav_logo_whiteout);
+        actionBar.setDisplayShowHomeEnabled(true);
 
         post = getIntent().getParcelableExtra(Post.class.getSimpleName());
 
