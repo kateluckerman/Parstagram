@@ -96,6 +96,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
         android:layout_weight="1"
+        android:textSize="12dp"
         tools:text="39 minutes ago" />
 
 </LinearLayout>

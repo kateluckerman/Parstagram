@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.parstagram.LoginActivity;
@@ -37,6 +38,8 @@ import com.parse.SaveCallback;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -99,16 +102,6 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 launchCamera();
-                if (photoFile != null) {
-                    ParseFile profileImage = new ParseFile(photoFile);
-                    ParseUser.getCurrentUser().put(KEY_PROFILE_IMAGE, profileImage);
-                    ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            Glide.with(getContext()).load(((ParseFile) ParseUser.getCurrentUser().get(KEY_PROFILE_IMAGE)).getUrl()).into(ivProfileImage);
-                        }
-                    });
-                }
             }
         });
 
@@ -130,6 +123,30 @@ public class ProfileFragment extends Fragment {
 
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
             startActivityForResult(intent, ComposeFragment.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ComposeFragment.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                if (photoFile != null) {
+                    ParseFile profileImageNew = new ParseFile(photoFile);
+                    ParseUser.getCurrentUser().put(KEY_PROFILE_IMAGE, profileImageNew);
+                    ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e != null) {
+                                Log.e(TAG, "Issue saving profile image", e);
+                            }
+                            Glide.with(getContext()).load(((ParseFile) ParseUser.getCurrentUser().get(KEY_PROFILE_IMAGE)).getUrl()).into(ivProfileImage);
+                        }
+                    });
+                }
+            } else { // Result was a failure
+                Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
