@@ -1,5 +1,6 @@
 package com.example.parstagram;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,6 +29,8 @@ public class SignUpActivity extends LoginActivity {
         user.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {
                 if (e == null) {
+                    Intent intent = new Intent("finish_activity");
+                    sendBroadcast(intent);
                     goMainActivity();
                 } else {
                     Log.e(TAG, "Issue with signup", e);

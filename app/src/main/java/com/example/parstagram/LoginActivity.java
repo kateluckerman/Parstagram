@@ -3,7 +3,10 @@ package com.example.parstagram;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -34,6 +37,22 @@ public class LoginActivity extends AppCompatActivity {
             goMainActivity();
         }
 
+        // set broadcast receiver so the signup activity can remove the login activity from the
+        // stack once the user is signed in
+        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context arg0, Intent intent) {
+                String action = intent.getAction();
+                if (action.equals("finish_activity")) {
+                    finish();
+                    // DO WHATEVER YOU WANT.
+                }
+            }
+        };
+
+        registerReceiver(broadcastReceiver, new IntentFilter("finish_activity"));
+
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
@@ -53,7 +72,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
     }
@@ -77,5 +95,6 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(i);
         finish();
     }
+
 
 }
