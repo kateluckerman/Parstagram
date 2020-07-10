@@ -54,6 +54,7 @@ public class ProfileFragment extends Fragment {
     private Button btnLogout;
     private RecyclerView rvPosts;
 
+    ParseUser user;
     List<Post> userPosts;
     private ProfilePostsAdapter adapter;
 
@@ -62,6 +63,10 @@ public class ProfileFragment extends Fragment {
 
     public ProfileFragment() {
         // Required empty public constructor
+    }
+
+    public ProfileFragment(ParseUser user) {
+        this.user = user;
     }
 
     @Override
@@ -80,9 +85,9 @@ public class ProfileFragment extends Fragment {
         btnLogout = view.findViewById(R.id.btnLogout);
         rvPosts = view.findViewById(R.id.rvPosts);
 
-        tvUsername.setText(ParseUser.getCurrentUser().getUsername());
+        tvUsername.setText(user.getUsername());
 
-        ParseFile profileImage = (ParseFile) ParseUser.getCurrentUser().get(KEY_PROFILE_IMAGE);
+        ParseFile profileImage = (ParseFile) user.get(KEY_PROFILE_IMAGE);
 
         if (profileImage != null) {
             Glide.with(getContext()).load(profileImage.getUrl()).into(ivProfileImage);
@@ -133,14 +138,14 @@ public class ProfileFragment extends Fragment {
             if (resultCode == RESULT_OK) {
                 if (photoFile != null) {
                     ParseFile profileImageNew = new ParseFile(photoFile);
-                    ParseUser.getCurrentUser().put(KEY_PROFILE_IMAGE, profileImageNew);
-                    ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+                    user.put(KEY_PROFILE_IMAGE, profileImageNew);
+                    user.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
                             if (e != null) {
                                 Log.e(TAG, "Issue saving profile image", e);
                             }
-                            Glide.with(getContext()).load(((ParseFile) ParseUser.getCurrentUser().get(KEY_PROFILE_IMAGE)).getUrl()).into(ivProfileImage);
+                            Glide.with(getContext()).load(((ParseFile) user.get(KEY_PROFILE_IMAGE)).getUrl()).into(ivProfileImage);
                         }
                     });
                 }
@@ -168,7 +173,7 @@ public class ProfileFragment extends Fragment {
     protected void queryUserPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
-        query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(Post.KEY_USER, user);
         query.setLimit(20);
         query.addDescendingOrder(Post.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<Post>() {
